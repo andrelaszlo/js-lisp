@@ -7,4 +7,12 @@ Do things like
 
 TODO:
 
-* Everything...
+* REPL
+* let
+* car, cdr and friends
+* defun
+* quote/unquote
+* some fun operators
+* exceptions
+* macros
+* Everything else...
