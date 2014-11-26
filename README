@@ -2,7 +2,7 @@ Toy lisp-like language in javascript
 
 Do things like
 
-    > evalulate(['+', 1, 2])
+    > interpret(['+', 1, 2])
     3
 
 TODO:
