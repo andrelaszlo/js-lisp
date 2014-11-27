@@ -22,9 +22,16 @@ var interpret = function (prog, parent_scope) {
         parent_scope = default_scope;
     }
     var scope = {'__parent_scope': parent_scope};
-    var fun_name = prog.shift();
-    var fun = scope_lookup(scope, fun_name);
-    return fun(prog);
+	if (prog instanceof Array) {
+		var fun_name = prog[0];
+		var fun = scope_lookup(scope, fun_name);
+		var args = prog.slice(1).map(function(arg) {
+			return interpret(arg, scope); // TODO: new scope not needed
+		});
+		return fun(args);
+	} else {
+		return prog;
+	}
 }
 
 var repl = function() {
