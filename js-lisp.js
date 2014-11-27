@@ -2,6 +2,9 @@ var default_scope = {
     '+': function(args) {
         return args.reduce(function(a, b){ return a+b; }, 0);
     },
+    '*': function(args) {
+        return args.reduce(function(a, b){ return a*b; }, 1);
+    }
 }
 
 var scope_lookup = function(scope, key) {
