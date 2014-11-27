@@ -17,7 +17,7 @@ Run tests:
 
     $ cd js-lisp
     $ npm install
-    $ $ ./node_modules/.bin/nodeunit test/js-lisp.js
+    $ ./node_modules/.bin/nodeunit test/js-lisp.js
 
 ## TODO
 
