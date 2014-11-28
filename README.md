@@ -17,13 +17,14 @@ Run tests:
 
     $ cd js-lisp
     $ npm install
-    $ ./node_modules/.bin/nodeunit test/js-lisp.js
+    $ ./node_modules/.bin/nodeunit
 
 ## TODO
 
 Some ideas for hacking:
 
 * let
+* lambdas
 * car, cdr and friends
 * defun
 * quote/unquote
