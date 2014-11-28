@@ -1,25 +1,39 @@
 var default_scope = {
-    '+': function(args) {
+
+    // Built-in function declarations. These all take two arguments: the
+    // current scope and an argument list.
+    '+': function(scope, args) {
         return args.reduce(function(a, b){ return a+b; }, 0);
     },
-    '*': function(args) {
+    '*': function(scope, args) {
         return args.reduce(function(a, b){ return a*b; }, 1);
     },
-    'head': function(args) { // TODO: exception if empty list
+    'head': function(scope, args) { // TODO: exception if empty list
         return args[0];
+    },
+}
+
+// Returns the parent scope of a scope
+var scope_pop = function(scope) {
+    if ('__parent_scope' in scope) {
+        return scope['__parent_scope'];
+    } else {
+        return null;
     }
 }
 
+// Adds a child scope to its parent scope and returns the child scope.
+var scope_push = function(parent_scope, child_scope) {
+    child_scope['__parent_scope'] = parent_scope;
+    return child_scope;
+}
+
 var scope_lookup = function(scope, key) {
-    while (scope != null) {
+    do {
         if (key in scope) {
             return scope[key];
-        } else if ('__parent_scope' in scope) {
-            scope = scope['__parent_scope'];
-        } else {
-            scope = null;
         }
-    }
+    } while (scope = scope_pop(scope));
     return null; // TODO: exceptions?
 }
 
@@ -34,7 +48,7 @@ var interpret = function (prog, parent_scope) {
         var args = prog.slice(1).map(function(arg) {
             return interpret(arg, scope); // TODO: new scope not needed
         });
-        return fun(args);
+        return fun(scope, args);
     } else {
         return prog;
     }
