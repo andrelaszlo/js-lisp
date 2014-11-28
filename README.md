@@ -1,5 +1,7 @@
 # JS-LISP
 
+![Build status](https://travis-ci.org/andrelaszlo/js-lisp.svg)
+
 Toy lisp-like language in javascript.
 
 Interactive mode:
