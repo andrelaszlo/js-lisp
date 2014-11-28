@@ -1,6 +1,16 @@
-{ "name": "js-lisp",
+{
+  "name": "js-lisp",
   "description": "Toy lisp-like language in javascript",
   "repository": "https://github.com/andrelaszlo/js-lisp",
   "version": "0.0.1",
-  "dependencies": {"nodeunit": "0.9.0"}
+  "dependencies": {
+    "nodeunit": "0.9.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-nodeunit": "^0.4.1"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  }
 }
