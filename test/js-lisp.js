@@ -14,6 +14,6 @@ exports.testNestedCalls = function(test){
 
 exports.testMultiplyAndFirst = function(test){
 	test.expect(1);
-	test.equal(jslisp.interpret(['*', 2, ['first', 3, 8]]), 6);
+	test.equal(jslisp.interpret(['*', 2, ['head', 3, 8]]), 6);
 	test.done();
 };

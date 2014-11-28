@@ -5,7 +5,7 @@ var default_scope = {
     '*': function(args) {
         return args.reduce(function(a, b){ return a*b; }, 1);
     },
-    'first': function(args) { // TODO: exception if empty list
+    'head': function(args) { // TODO: exception if empty list
         return args[0];
     }
 }
