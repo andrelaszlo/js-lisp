@@ -23,7 +23,6 @@ Run tests:
 
 Some ideas for hacking:
 
-* REPL
 * let
 * car, cdr and friends
 * defun
