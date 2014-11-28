@@ -1,6 +1,6 @@
 # JS-LISP
 
-![Build status](https://travis-ci.org/andrelaszlo/js-lisp.svg)
+[![Build status](https://travis-ci.org/andrelaszlo/js-lisp.svg)](https://travis-ci.org/andrelaszlo/js-lisp/)
 
 Toy lisp-like language in javascript.
 
