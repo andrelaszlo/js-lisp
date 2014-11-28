@@ -41,16 +41,28 @@ var interpret = function (prog, parent_scope) {
     if (typeof(parent_scope) == 'undefined') {
         parent_scope = default_scope;
     }
-    var scope = {'__parent_scope': parent_scope};
-    if (prog instanceof Array) {
-        var fun_name = prog[0];
-        var fun = scope_lookup(scope, fun_name);
-        var args = prog.slice(1).map(function(arg) {
-            return interpret(arg, scope); // TODO: new scope not needed
-        });
-        return fun(scope, args);
-    } else {
+
+    if (! (prog instanceof Array)) {
         return prog;
+    }
+    if (prog.length == 0) {
+        return [];
+    }
+
+    var fun_exp = prog[0];
+
+    if (fun_exp === 'lambda') {
+        var arglist = prog[1];
+        // TODO
+    } else if (typeof fun_exp == 'string') {
+        // Built-in or regular function
+        var fun = scope_lookup(parent_scope, fun_exp);
+        var args = prog.slice(1).map(function(arg) {
+            return interpret(arg, parent_scope);
+        });
+        return fun(parent_scope, args);
+    } else {
+        throw new Error(String(fun_exp) + ' is not a function name');
     }
 }
 
