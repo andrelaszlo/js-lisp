@@ -28,16 +28,16 @@ var interpret = function (prog, parent_scope) {
         parent_scope = default_scope;
     }
     var scope = {'__parent_scope': parent_scope};
-	if (prog instanceof Array) {
-		var fun_name = prog[0];
-		var fun = scope_lookup(scope, fun_name);
-		var args = prog.slice(1).map(function(arg) {
-			return interpret(arg, scope); // TODO: new scope not needed
-		});
-		return fun(args);
-	} else {
-		return prog;
-	}
+    if (prog instanceof Array) {
+        var fun_name = prog[0];
+        var fun = scope_lookup(scope, fun_name);
+        var args = prog.slice(1).map(function(arg) {
+            return interpret(arg, scope); // TODO: new scope not needed
+        });
+        return fun(args);
+    } else {
+        return prog;
+    }
 }
 
 var repl = function() {
@@ -52,10 +52,10 @@ var repl = function() {
 
     // This pretty bird was made by 'hjw'
     var welcome = "\
-     __     \n\
- ___( o)>   JS-LISP \n\
- \\ <_, )    Ctrl-D to exit \n\
-  `---'     Example input: ['+', 1, 2, 3]";
+      __     \n\
+  ___( o)>   JS-LISP \n\
+  \\ <_. )    Ctrl-D to exit \n\
+   `---'     Example input: ['+', 1, 2, 3]";
     console.log(welcome);
 
     rl.setPrompt(prompt);
