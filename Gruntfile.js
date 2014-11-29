@@ -7,6 +7,9 @@ module.exports = function(grunt) {
     // Unit tests.
     nodeunit: {
       tests: ['test/*'],
+      options: {
+        reporter: 'verbose'
+      }
     },
   });
 
