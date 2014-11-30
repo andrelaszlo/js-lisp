@@ -39,13 +39,27 @@ var scope_lookup = function(scope, key) {
     return null; // TODO: exceptions?
 }
 
-var interpret = function (prog, parent_scope) {
+var pretty = function(prog, indent) {
+    return JSON.stringify(prog, function(key, value) {
+        if (_.isFunction(value)) {
+            var name = value.name || "(anonymous)";
+            return "function " + name;
+        }
+        return value;
+    }, 2);
+}
+
+var log = function() {
+    console.log(">>> " + Array.prototype.slice.call(arguments).map(pretty).join("\n"));
+}
+
+var interpret = function(prog, parent_scope) {
     if (typeof(parent_scope) == 'undefined') {
         parent_scope = default_scope;
     }
 
     if (typeof prog == 'string') {
-        // A bound name, return it's actual value
+        // A bound name, return its actual value
         return scope_lookup(parent_scope, prog);
     } else if (! (prog instanceof Array)) {
         // Some primitive value, like a number, will evaluate to itself
@@ -57,15 +71,12 @@ var interpret = function (prog, parent_scope) {
         return [];
     }
 
-    var fun_exp = prog[0];
+    if (prog[0] === 'lambda') {
+        // A lambda
+        var formal_parameters = prog[1];
+        var lambda_body = prog[2];
 
-    if (_.isArray(fun_exp) && fun_exp[0] === 'lambda') {
-        // TODO: this only handles lambdas that are being invoked immediately
-        var formal_parameters = fun_exp[1];
-        var lambda_body = fun_exp[2];
-
-        var lambda = function() {
-            var args = Array.prototype.slice.call(arguments);
+        return function(parent_scope, args) {
             if (formal_parameters.length != args.length) {
                 throw new Error("Wrong number of args, " + args.length + " instead of " + formal_parameters.length);
             }
@@ -80,22 +91,14 @@ var interpret = function (prog, parent_scope) {
 
             return interpret(lambda_body, scope);
         };
-
-        var actual_parameters = prog.slice(1).map(function(param) {
-            return interpret(param, parent_scope);
-        });
-
-        return lambda.apply(null, actual_parameters);
-    } else if (typeof fun_exp == 'string') {
-        // Built-in or named function
-        var fun = scope_lookup(parent_scope, fun_exp);
-        var args = prog.slice(1).map(function(arg) {
-            return interpret(arg, parent_scope);
-        });
-        return fun(parent_scope, args);
-    } else {
-        throw new Error(String(fun_exp) + ' is not a function name');
     }
+
+    var prog_eval = prog.map(function(arg) {
+        return interpret(arg, parent_scope);
+    });
+    var fun = prog_eval[0];
+    var args = prog_eval.slice(1);
+    return fun(parent_scope, args);
 }
 
 var repl = function() {
