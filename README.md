@@ -25,8 +25,6 @@ Run tests:
 
 Some ideas for hacking:
 
-* let
-* lambdas
 * car, cdr and friends
 * defun
 * quote/unquote

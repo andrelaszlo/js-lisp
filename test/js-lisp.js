@@ -14,6 +14,8 @@ var interpretTest = function(expression, expected) {
 
 exports.testOperatorPlus = interpretTest(['+', 1, 2], 3);
 
+exports.testOperatorMultiplication = interpretTest(['*', 3, 4], 12);
+
 exports.testNestedCalls = interpretTest(['+', 1, ['+', 1, 1]], 3);
 
 exports.testMultiplyAndHead = interpretTest(['*', 2, ['head', 3, 8]], 6);
@@ -23,3 +25,20 @@ exports.testSimpleLambda = interpretTest(
      2, 3],
     6);
 
+exports.testSimpleLet = interpretTest(
+    ['let',
+     [['x', 3], ['y', 4]],
+     ['*', 'x', 'y']],
+    12);
+
+exports.testBoundLambda = interpretTest(
+    ['let',
+     [['square', ['lambda', ['x'], ['*', 'x', 'x']]]],
+     ['+', ['square', 3], ['square', 4]]],
+    25);
+
+exports.testJsFunction = interpretTest(
+    ['let',
+     [['sqrt', ['js', Math.sqrt]]],
+     ['floor', ['sqrt', 15]]],
+    3);
