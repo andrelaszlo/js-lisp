@@ -12,8 +12,9 @@ var default_scope = {
     },
     'head': function(scope, args) { // TODO: exception if empty list
         return args[0];
-    }
-}
+    },
+    'floor': ['js', Math.floor]
+};
 
 // Returns the parent scope of a scope
 var scope_pop = function(scope) {
@@ -60,7 +61,8 @@ var interpret = function(prog, parent_scope) {
 
     if (typeof prog == 'string') {
         // A bound name, return its actual value
-        return scope_lookup(parent_scope, prog);
+        return interpret(scope_lookup(parent_scope, prog),
+                         parent_scope);
     } else if (! (prog instanceof Array)) {
         // Some primitive value, like a number, will evaluate to itself
         return prog;
@@ -71,8 +73,8 @@ var interpret = function(prog, parent_scope) {
         return [];
     }
 
-    if (prog[0] === 'lambda') {
-        // A lambda
+    switch (prog[0]) {
+    case 'lambda':
         var formal_parameters = prog[1];
         var lambda_body = prog[2];
 
@@ -91,11 +93,31 @@ var interpret = function(prog, parent_scope) {
 
             return interpret(lambda_body, scope);
         };
+    case 'let':
+        var scope = {};
+        var bindings = prog[1];
+        var body = prog[2];
+        bindings.forEach(function(bind) {
+            scope[bind[0]] = interpret(bind[1], parent_scope);
+        });
+        scope_push(parent_scope, scope);
+        return interpret(body, scope);
+    case 'js':
+        // A simpler way of using js functions directly
+        var js_function = prog[1];
+        // TODO: maybe use `eval` here to map variables in the current scope to
+        // the current js scope?
+        return function(parent_scope, args) {
+            return js_function.apply(null, args);
+        };
+    default:
+        // Something else, hopefully a function...
     }
 
     var prog_eval = prog.map(function(arg) {
         return interpret(arg, parent_scope);
     });
+
     var fun = prog_eval[0];
     var args = prog_eval.slice(1);
     return fun(parent_scope, args);
