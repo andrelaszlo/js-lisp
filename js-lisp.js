@@ -1,66 +1,11 @@
 var _ = require('underscore');
+var definitions = require('./definitions');
+var repl = require('./repl');
+var scope = require('./scope');
 
-var Scope = function (initial, parent_scope) {
-    var _bindings = initial;
-    var _parent_scope = parent_scope || null;
+var Scope = scope.Scope;
 
-    /* Return new scope with the current scope as parent */
-    var push = function(initial) {
-        var bindings = initial || {};
-        return new Scope(bindings, this);
-    };
-
-    var set = function(name, value) {
-        _bindings[name] = value;
-    };
-
-    var get = function(name) {
-        if (name in _bindings) {
-            return _bindings[name];
-        } else if (_parent_scope) {
-            return _parent_scope.get(name);
-        }
-        return undefined; // TODO: exceptions?
-    };
-
-    /* Get the global scope */
-    var global = function() {
-        if (_parent_scope) {
-            return _parent_scope.global();
-        } else {
-            return this;
-        }
-    };
-
-    var setGlobal = function(name, value) {
-        var global_scope = global();
-        global_scope.set(name, value);
-    };
-
-    return {
-        set: set,
-        get: get,
-        push: push,
-        global: global,
-        setGlobal: setGlobal
-    };
-}
-
-var global_scope = new Scope({
-
-    // Built-in function declarations. These all take two arguments: the
-    // current scope and an argument list.
-    '+': function(scope, args) {
-        return args.reduce(function(a, b){ return a+b; }, 0);
-    },
-    '*': function(scope, args) {
-        return args.reduce(function(a, b){ return a*b; }, 1);
-    },
-    'head': function(scope, args) { // TODO: exception if empty list
-        return args[0];
-    },
-    'floor': ['js', Math.floor]
-});
+var global_scope = new Scope(definitions.global_scope);
 
 var pretty = function(prog, indent) {
     return JSON.stringify(prog, function(key, value) {
@@ -70,11 +15,11 @@ var pretty = function(prog, indent) {
         }
         return value;
     }, 2);
-}
+};
 
 var log = function() {
     console.log(">>> " + Array.prototype.slice.call(arguments).map(pretty).join("\n"));
-}
+};
 
 var interpret = function(prog, parent_scope) {
     if (typeof(parent_scope) == 'undefined') {
@@ -139,56 +84,12 @@ var interpret = function(prog, parent_scope) {
     var fun = prog_eval[0];
     var args = prog_eval.slice(1);
     return fun(parent_scope, args);
-}
-
-var repl = function() {
-    var readline = require('readline');
-
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    var prompt = "js-lisp> ";
-
-    // This pretty bird was made by 'hjw'
-    var welcome = "\
-      __     \n\
-  ___( o)>   JS-LISP \n\
-  \\ <_. )    Ctrl-D to exit \n\
-   `---'     Example input: ['+', 1, 2, 3]";
-    console.log(welcome);
-
-    rl.setPrompt(prompt);
-    rl.prompt();
-
-    rl.on('line', function(line) {
-        if (line.trim() == "help") {
-            console.log(welcome);
-            rl.prompt();
-            return;
-        }
-        try {
-            var cmd = eval(line.trim());
-            var result = interpret(cmd);
-            console.log(result);
-        } catch (e) {
-            console.log("What the hell was that?");
-            console.log(e.stack);
-        }
-        rl.prompt();
-    }).on('close', function() {
-        console.log('\nExiting');
-        process.exit(0);
-    });
-
-}
+};
 
 if (require.main === module) {
-    repl();
+    repl.repl(interpret);
 }
 
 module.exports = {
-    interpret: interpret,
-    repl: repl,
+    interpret: interpret
 };

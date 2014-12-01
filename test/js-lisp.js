@@ -48,3 +48,8 @@ exports.testJsScope = interpretTest(
      [['x', 10]],
      [['js', function(y) {return this.get('x') * y;}], 2]],
     20);
+
+exports.testMathModule = interpretTest(
+    ['pow', ['floor', 'PI'], 2],
+    9
+);
