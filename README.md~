@@ -36,7 +36,7 @@ Some ideas for hacking:
 ## Notes
 
 * The idea to use javascript, not only to parse a lisp, but also to represent
-  it, is probably not a very good one - but it might be fun.
+  it is probably not a very good one - but it might be fun.
 * I have a feeling that mixing the two languages can be both powerful and
   confusing.
 
