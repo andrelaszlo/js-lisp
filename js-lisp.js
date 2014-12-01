@@ -45,14 +45,14 @@ var interpret = function(prog, parent_scope) {
         var formal_parameters = prog[1];
         var lambda_body = prog[2];
 
-        return function(parent_scope, args) {
-            if (formal_parameters.length != args.length) {
-                throw new Error("Wrong number of args, " + args.length + " instead of " + formal_parameters.length);
+        return function() {
+            if (formal_parameters.length != arguments.length) {
+                throw new Error("Wrong number of args, " + arguments.length + " instead of " + formal_parameters.length);
             }
 
             // Bind the parameters to variables in the local scope.
-            var scope = parent_scope.push();
-            _.zip(formal_parameters, args).forEach(
+            var scope = this.push();
+            _.zip(formal_parameters, arguments).forEach(
                 function(binding) {
                     scope.set(binding[0], binding[1]);
                 });
@@ -67,12 +67,6 @@ var interpret = function(prog, parent_scope) {
             scope.set(bind[0], interpret(bind[1], parent_scope));
         });
         return interpret(body, scope);
-    case 'js':
-        // A simpler way of using js functions directly
-        var js_function = prog[1];
-        return function(parent_scope, args) {
-            return js_function.apply(parent_scope, args);
-        };
     default:
         // Something else, hopefully a function...
     }
@@ -83,7 +77,7 @@ var interpret = function(prog, parent_scope) {
 
     var fun = prog_eval[0];
     var args = prog_eval.slice(1);
-    return fun(parent_scope, args);
+    return fun.apply(parent_scope, args);
 };
 
 if (require.main === module) {

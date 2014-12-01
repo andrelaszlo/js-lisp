@@ -39,14 +39,14 @@ exports.testBoundLambda = interpretTest(
 
 exports.testJsFunction = interpretTest(
     ['let',
-     [['sqrt', ['js', Math.sqrt]]],
+     [['sqrt', Math.sqrt]],
      ['floor', ['sqrt', 15]]],
     3);
 
 exports.testJsScope = interpretTest(
     ['let',
      [['x', 10]],
-     [['js', function(y) {return this.get('x') * y;}], 2]],
+     [function(y) {return this.get('x') * y;}, 2]],
     20);
 
 exports.testMathModule = interpretTest(
