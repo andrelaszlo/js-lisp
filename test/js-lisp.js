@@ -42,3 +42,9 @@ exports.testJsFunction = interpretTest(
      [['sqrt', ['js', Math.sqrt]]],
      ['floor', ['sqrt', 15]]],
     3);
+
+exports.testJsScope = interpretTest(
+    ['let',
+     [['x', 10]],
+     [['js', function(y) {return this.get('x') * y;}], 2]],
+    20);

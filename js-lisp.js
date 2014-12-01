@@ -1,6 +1,52 @@
 var _ = require('underscore');
 
-var default_scope = {
+var Scope = function (initial, parent_scope) {
+    var _bindings = initial;
+    var _parent_scope = parent_scope || null;
+
+    /* Return new scope with the current scope as parent */
+    var push = function(initial) {
+        var bindings = initial || {};
+        return new Scope(bindings, this);
+    };
+
+    var set = function(name, value) {
+        _bindings[name] = value;
+    };
+
+    var get = function(name) {
+        if (name in _bindings) {
+            return _bindings[name];
+        } else if (_parent_scope) {
+            return _parent_scope.get(name);
+        }
+        return undefined; // TODO: exceptions?
+    };
+
+    /* Get the global scope */
+    var global = function() {
+        if (_parent_scope) {
+            return _parent_scope.global();
+        } else {
+            return this;
+        }
+    };
+
+    var setGlobal = function(name, value) {
+        var global_scope = global();
+        global_scope.set(name, value);
+    };
+
+    return {
+        set: set,
+        get: get,
+        push: push,
+        global: global,
+        setGlobal: setGlobal
+    };
+}
+
+var global_scope = new Scope({
 
     // Built-in function declarations. These all take two arguments: the
     // current scope and an argument list.
@@ -14,31 +60,7 @@ var default_scope = {
         return args[0];
     },
     'floor': ['js', Math.floor]
-};
-
-// Returns the parent scope of a scope
-var scope_pop = function(scope) {
-    if ('__parent_scope' in scope) {
-        return scope['__parent_scope'];
-    } else {
-        return null;
-    }
-}
-
-// Adds a child scope to its parent scope and returns the child scope.
-var scope_push = function(parent_scope, child_scope) {
-    child_scope['__parent_scope'] = parent_scope;
-    return child_scope;
-}
-
-var scope_lookup = function(scope, key) {
-    do {
-        if (key in scope) {
-            return scope[key];
-        }
-    } while (scope = scope_pop(scope));
-    return null; // TODO: exceptions?
-}
+});
 
 var pretty = function(prog, indent) {
     return JSON.stringify(prog, function(key, value) {
@@ -56,12 +78,12 @@ var log = function() {
 
 var interpret = function(prog, parent_scope) {
     if (typeof(parent_scope) == 'undefined') {
-        parent_scope = default_scope;
+        parent_scope = global_scope;
     }
 
     if (typeof prog == 'string') {
         // A bound name, return its actual value
-        return interpret(scope_lookup(parent_scope, prog),
+        return interpret(parent_scope.get(prog),
                          parent_scope);
     } else if (! (prog instanceof Array)) {
         // Some primitive value, like a number, will evaluate to itself
@@ -84,31 +106,27 @@ var interpret = function(prog, parent_scope) {
             }
 
             // Bind the parameters to variables in the local scope.
-            var scope = {};
+            var scope = parent_scope.push();
             _.zip(formal_parameters, args).forEach(
                 function(binding) {
-                    scope[binding[0]] = binding[1];
+                    scope.set(binding[0], binding[1]);
                 });
-            scope_push(parent_scope, scope);
 
             return interpret(lambda_body, scope);
         };
     case 'let':
-        var scope = {};
+        var scope = parent_scope.push();
         var bindings = prog[1];
         var body = prog[2];
         bindings.forEach(function(bind) {
-            scope[bind[0]] = interpret(bind[1], parent_scope);
+            scope.set(bind[0], interpret(bind[1], parent_scope));
         });
-        scope_push(parent_scope, scope);
         return interpret(body, scope);
     case 'js':
         // A simpler way of using js functions directly
         var js_function = prog[1];
-        // TODO: maybe use `eval` here to map variables in the current scope to
-        // the current js scope?
         return function(parent_scope, args) {
-            return js_function.apply(null, args);
+            return js_function.apply(parent_scope, args);
         };
     default:
         // Something else, hopefully a function...
