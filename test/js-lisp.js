@@ -29,6 +29,8 @@ exports.testMultiplyAndHead = interpretTest(['*', 2, ['head', 3, 8]], 6);
 
 exports.testTail = interpretTest(['tail', 3, 8, 6], [8, 6], true);
 
+exports.testList = interpretTest(['list', 3, 8, 6], [3, 8, 6], true);
+
 exports.testSimpleLambda = interpretTest(
     [['lambda', ['x', 'y'], ['*', 'x', 'y']],
      2, 3],
