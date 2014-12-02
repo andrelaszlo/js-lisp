@@ -1,5 +1,5 @@
 var args_as_array = function(args) {
-	return Array.prototype.slice.call(args);
+    return Array.prototype.slice.call(args);
 }
 
 var global_scope = {
@@ -14,6 +14,9 @@ var global_scope = {
     },
     'head': function() { // TODO: exception if empty list
         return args_as_array(arguments)[0];
+    },
+    'tail': function() {
+        return args_as_array(arguments).slice(1);
     }
 };
 
