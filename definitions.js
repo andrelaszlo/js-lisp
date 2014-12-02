@@ -17,6 +17,9 @@ var global_scope = {
     },
     'tail': function() {
         return args_as_array(arguments).slice(1);
+    },
+    'list' : function() {
+        return args_as_array(arguments);
     }
 };
 
