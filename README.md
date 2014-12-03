@@ -6,8 +6,7 @@ Toy lisp-like language in javascript.
 
 Interactive mode:
 
-    js-lisp> ['+', 1, 2, 3]
-    6
+![Interactive session](/misc/gifcast.gif)
 
 ## GETTING STARTED
 
