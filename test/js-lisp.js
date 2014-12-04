@@ -11,7 +11,7 @@ var interpretTest = function(expression, expected, deepEqual) {
             test.deepEqual(jslisp.interpret(expression), expected);
             test.done();
         };
-    };	
+    };
     return function(test) {
         test.expect(1);
         test.equal(jslisp.interpret(expression), expected);
@@ -37,10 +37,17 @@ exports.testSimpleLambda = interpretTest(
     6);
 
 exports.testSimpleLet = interpretTest(
-    ['let',
-     [['x', 3], ['y', 4]],
+    ['let', [['x', 3], ['y', 4]],
      ['*', 'x', 'y']],
     12);
+
+exports.testNestedLet = interpretTest(
+    ['let', [['x', 3]],   // Bind x,
+     ['*',
+      ['let', [['x', 4]],
+       'x'],              // then bind x in a new scope and return it.
+      'x']],              // Multiply inner and outer x:
+    12);                  // the result should not be 9 or 16
 
 exports.testBoundLambda = interpretTest(
     ['let',
