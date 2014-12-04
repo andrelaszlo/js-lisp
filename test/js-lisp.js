@@ -25,7 +25,11 @@ exports.testOperatorMultiplication = interpretTest(['*', 3, 4], 12);
 
 exports.testNestedCalls = interpretTest(['+', 1, ['+', 1, 1]], 3);
 
-exports.testMultiplyAndHead = interpretTest(['*', 2, ['head', 3, 8]], 6);
+exports.testMultiplicationAndHead = interpretTest(['*', 2, ['head', 3, 8]], 6);
+
+exports.testOperatorDivision = interpretTest(['/', 16, 2, 2], 4);
+
+exports.testDivisionOneArgument = interpretTest(['/', 2], 0.5);
 
 exports.testTail = interpretTest(['tail', 3, 8, 6], [8, 6], true);
 

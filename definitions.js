@@ -12,6 +12,13 @@ var global_scope = {
     '*': function() {
         return args_as_array(arguments).reduce(function(a, b){ return a*b; }, 1);
     },
+    '/': function() {
+        var args = args_as_array(arguments);
+        if (args.length == 1) {
+            return 1/args[0];
+        }
+        return args.reduce(function(a, b){ return a/b; });
+    },
     'head': function() { // TODO: exception if empty list
         return args_as_array(arguments)[0];
     },
