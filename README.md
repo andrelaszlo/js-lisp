@@ -24,9 +24,12 @@ Run tests:
 
 Some ideas for hacking:
 
-* car, cdr and friends
+* global variables
 * defun
 * quote/unquote
+* function/funcall
+* format
+* loops
 * some fun operators
 * exceptions
 * macros
@@ -36,8 +39,8 @@ Some ideas for hacking:
 
 * The idea to use javascript, not only to parse a lisp, but also to represent
   it, is probably not a very good one - but it might be fun.
-* I have a feeling that mixing the two languages can be both powerful and
-  confusing.
+* Hopefully the more verbose syntax of javascript arrays will be made up for by
+  being able to combine javascript and lisp in the same code.
 
 ## Open questions
 
