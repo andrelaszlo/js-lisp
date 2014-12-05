@@ -67,6 +67,8 @@ var interpret = function(prog, parent_scope) {
             scope.set(bind[0], interpret(bind[1], parent_scope));
         });
         return interpret(body, scope);
+    case 'quote':
+        return prog[1];
     default:
         // Something else, hopefully a function...
     }
