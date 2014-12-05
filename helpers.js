@@ -40,6 +40,22 @@ var repeat = function(string, count) {
     return rpt;
 };
 
+var pretty = function(prog, indent) {
+    return JSON.stringify(prog, function(key, value) {
+        if (_.isFunction(value)) {
+            var name = value.name || "(anonymous)";
+            return "function " + name;
+        }
+        return value;
+    }, 2);
+};
+
+var log = function() {
+    console.log(">>> " + Array.prototype.slice.call(arguments).map(pretty).join("\n"));
+};
+
 module.exports = {
-    repeat: repeat
+    repeat: repeat,
+    pretty: pretty,
+    log: log
 };
