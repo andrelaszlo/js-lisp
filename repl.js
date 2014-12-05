@@ -46,6 +46,7 @@ var repl = function(interpreter) {
         switch(line.trim().toLowerCase()) {
         case 'help':
             console.log(welcome);
+            rl.prompt();
             return;
         case 'exit':
             exit();
