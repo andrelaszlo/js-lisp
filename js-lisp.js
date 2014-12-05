@@ -1,25 +1,15 @@
 var _ = require('underscore');
+
 var definitions = require('./definitions');
 var repl = require('./repl');
-var scope = require('./scope');
 
+var scope = require('./scope');
 var Scope = scope.Scope;
 
+var helpers = require('./helpers');
+var log = helpers.log;
+
 var global_scope = new Scope(definitions.global_scope);
-
-var pretty = function(prog, indent) {
-    return JSON.stringify(prog, function(key, value) {
-        if (_.isFunction(value)) {
-            var name = value.name || "(anonymous)";
-            return "function " + name;
-        }
-        return value;
-    }, 2);
-};
-
-var log = function() {
-    console.log(">>> " + Array.prototype.slice.call(arguments).map(pretty).join("\n"));
-};
 
 var interpret = function(prog, parent_scope) {
     if (typeof(parent_scope) == 'undefined') {
