@@ -27,6 +27,9 @@ var global_scope = {
     },
     'list' : function() {
         return args_as_array(arguments);
+    },
+    'progn': function() {
+        return args_as_array(arguments).slice(-1);
     }
 };
 

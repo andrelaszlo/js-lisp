@@ -79,3 +79,5 @@ exports.testMathModule = interpretTest(
     ['pow', ['floor', 'PI'], 2],
     9
 );
+
+exports.testProgn = interpretTest(['progn', ['*', 3, 4], ['+', 1, 2]], 3)
