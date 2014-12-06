@@ -56,7 +56,16 @@ var interpret = function(prog, parent_scope) {
         bindings.forEach(function(bind) {
             scope.set(bind[0], interpret(bind[1], parent_scope));
         });
-        return interpret(body, scope);
+      return interpret(body, scope);
+    case 'set':
+        var pairs = prog.slice(1);
+        var name, value;
+        for (var i = 0; i < pairs.length-1; i++) {
+            name = pairs[i];
+            value = interpret(pairs[i+1], parent_scope);
+            parent_scope.set(name, value);
+        }
+        return value;
     case 'quote':
         return prog[1];
     default:
