@@ -59,7 +59,9 @@ var repl = function(interpreter) {
             var cmd = eval(line_buffer.join("\n"));
             var result = interpreter(cmd);
             line_buffer = [];
-            console.log(result);
+            if (result != undefined) {
+                console.log(result);
+            }
         } catch (ex) {
             switch (ex.name) {
             case 'SyntaxError':
