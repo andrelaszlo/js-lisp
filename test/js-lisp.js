@@ -80,4 +80,21 @@ exports.testMathModule = interpretTest(
     9
 );
 
-exports.testProgn = interpretTest(['progn', ['*', 3, 4], ['+', 1, 2]], 3)
+exports.testProgn = interpretTest(['progn', ['*', 3, 4], ['+', 1, 2]], 3);
+
+exports.testSetValue = interpretTest(['set', 'x', 3], 3);
+
+exports.testMultipleSet = interpretTest(
+    ['progn',
+     ['set', 'x', 2, 'y', 3],
+     ['set', 'z', ['+', 'x', 'y']],
+     'z'],
+    5
+);
+
+exports.testShadowingSet = interpretTest(
+    ['let', [['x', 10]],
+     ['set', 'x', 20],
+     'x'],
+    20
+);
