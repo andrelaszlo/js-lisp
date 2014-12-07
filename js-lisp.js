@@ -35,7 +35,7 @@ var interpret = function(prog, parent_scope) {
         var formal_parameters = prog[1];
         var lambda_body = prog[2];
 
-        return function() {
+        var lambda_fun = function() {
             if (formal_parameters.length != arguments.length) {
                 throw new Error("Wrong number of args, " + arguments.length + " instead of " + formal_parameters.length);
             }
@@ -49,6 +49,10 @@ var interpret = function(prog, parent_scope) {
 
             return interpret(lambda_body, scope);
         };
+
+        lambda_fun.toString = function() { return "[Lambda]"; };
+
+        return lambda_fun;
     case 'let':
         var scope = parent_scope.push();
         var bindings = prog[1];

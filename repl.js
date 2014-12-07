@@ -60,7 +60,7 @@ var repl = function(interpreter) {
             var result = interpreter(cmd);
             line_buffer = [];
             if (result != undefined) {
-                console.log(result);
+                console.log(String(result));
             }
         } catch (ex) {
             switch (ex.name) {
