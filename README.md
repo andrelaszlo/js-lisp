@@ -24,7 +24,6 @@ Run tests:
 
 Some ideas for hacking:
 
-* global variables
 * defun
 * quote/unquote
 * function/funcall
@@ -55,3 +54,4 @@ Some ideas for hacking:
   Both could be valid JS, though.
 * Could variable names be used as symbols somehow? Or should we escape strings
   or symbols using some funny notation like s("x")?
+* Lisp 1 or 2?
