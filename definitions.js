@@ -19,6 +19,18 @@ var global_scope = {
         }
         return args.reduce(function(a, b){ return a/b; });
     },
+    '<': function() {
+        var args = args_as_array(arguments);
+        if (args.length < 2) {
+            return true;
+        }
+        for (var i = 0; i < args.length-1; i++) {
+            if (args[i] >= args[i+1]) {
+                return false;
+            }
+        }
+        return true;
+    },
     'head': function() { // TODO: exception if empty list
         return args_as_array(arguments)[0];
     },

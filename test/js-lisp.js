@@ -31,6 +31,14 @@ exports.testOperatorDivision = interpretTest(['/', 16, 2, 2], 4);
 
 exports.testDivisionOneArgument = interpretTest(['/', 2], 0.5);
 
+exports.testLessThanOperatorTrue = interpretTest(['<', 1, 2, 3], true);
+
+exports.testLessThanOperatorFalse = interpretTest(['<', 1, 4, 3], false);
+
+exports.testLessThanWithOneArgument = interpretTest(['<', 1], true);
+
+exports.testLessThanWithEqualArgs = interpretTest(['<', 1, 1, 1], false);
+
 exports.testTail = interpretTest(['tail', 3, 8, 6], [8, 6], true);
 
 exports.testList = interpretTest(['list', 3, 8, 6], [3, 8, 6], true);
