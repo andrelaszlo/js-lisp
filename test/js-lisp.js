@@ -39,6 +39,36 @@ exports.testLessThanWithOneArgument = interpretTest(['<', 1], true);
 
 exports.testLessThanWithEqualArgs = interpretTest(['<', 1, 1, 1], false);
 
+exports.testMoreThanOperatorTrue = interpretTest(['>', 3, 2, 1], true);
+
+exports.testMoreThanOperatorFalse = interpretTest(['>', 1, 4, 3], false);
+
+exports.testMoreThanWithOneArgument = interpretTest(['>', 1], true);
+
+exports.testMoreThanWithEqualArgs = interpretTest(['>', 1, 1, 1], false);
+
+exports.testEqualOperatorTrue = interpretTest(['=', 1, 1, 1], true);
+
+exports.testEqualOperatorFalse = interpretTest(['=', 1, 4, 3], false);
+
+exports.testEqualWithOneArgument = interpretTest(['=', 1], true);
+
+exports.testLessOrEqualThanOperatorTrue = interpretTest(['<=', 1, 2, 3], true);
+
+exports.testLessOrEqualThanOperatorFalse = interpretTest(['<=', 1, 4, 3], false);
+
+exports.testLessOrEqualThanWithOneArgument = interpretTest(['<=', 1], true);
+
+exports.testLessOrEqualThanWithEqualArgs = interpretTest(['<=', 1, 1, 1], true);
+
+exports.testMoreOrEqualThanOperatorTrue = interpretTest(['>=', 3, 2, 1], true);
+
+exports.testMoreOrEqualThanOperatorFalse = interpretTest(['>=', 1, 4, 3], false);
+
+exports.testMoreOrEqualThanWithOneArgument = interpretTest(['>=', 1], true);
+
+exports.testMoreOrEqualThanWithEqualArgs = interpretTest(['>=', 1, 1, 1], true);
+
 exports.testTail = interpretTest(['tail', 3, 8, 6], [8, 6], true);
 
 exports.testList = interpretTest(['list', 3, 8, 6], [3, 8, 6], true);
